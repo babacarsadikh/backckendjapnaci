@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const cookieSession = require("cookie-session");
+const nodemailer = require('nodemailer'); 
 
 const app = express();
 
@@ -27,12 +28,41 @@ app.use(
     sameSite: 'strict'
   })
 );
-
 // database
 const db = require("./app/models");
 const Role = db.role;
 
 db.sequelize.sync();
+// Configuration du transporteur Nodemailer
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'fambayegaye@gmail.com',
+    pass: 'thiatouyayam'
+  }
+});
+// Gestion de la route pour l'envoi d'e-mails
+app.post('/send-email', (req, res) => {
+  const { to, subject, text } = req.body;
+
+  const mailOptions = {
+    from: 'fambayegaye@gmail.com',
+    to: to,
+    subject: subject,
+    text: text
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error(error);
+      return res.status(500).send('Erreur lors de l\'envoi de l\'e-mail');
+    } else {
+      console.log('E-mail envoyé : ' + info.response);
+      return res.status(200).send('E-mail envoyé avec succès');
+    }
+  });
+});
+
 // force: true will drop the table if it already exists
 // db.sequelize.sync({force: true}).then(() => {
 //   console.log('Drop and Resync Database with { force: true }');
@@ -47,6 +77,10 @@ app.get("/", (req, res) => {
 // routes
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
+require('./app/routes/donnateur.routes')(app)
+require("./app/routes/dons.routes")(app);
+require('./app/routes/donFinancier.routes')(app)
+
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
