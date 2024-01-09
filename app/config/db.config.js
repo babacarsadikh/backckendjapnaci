@@ -1,8 +1,8 @@
 module.exports = {
-  HOST: "91.234.194.249",
-  USER: "c2273711c_sadikh",
-  PASSWORD: "fAmbaye1994",
-  DB: "c2273711c_apijapnaci	",
+  HOST: "localhost",
+  USER: "c2273711c_mobidev",
+  PASSWORD: "fAmbaye1994)",
+  DB: "c2273711c_japnaci",
   dialect: "mysql",
   pool: {
     max: 5,
@@ -12,7 +12,3 @@ module.exports = {
   }
 };
 
-// Serveur Mysql : 91.216.107.164 (à la place de localhost quand vous installez un CMS)
-// Nom de la base Mysql : dkrin2191788_1iguqg
-// Identifiant / login : dkrin2191788
-// Mot de passe : eC6*SE3qjN9KbNW
